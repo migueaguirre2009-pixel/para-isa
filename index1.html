@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Isabella 🩵</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500&family=Caveat:wght@700&family=Great+Vibes&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --celeste: #b3e5fc;
+            --azul-brillante: #4fc3f7;
+            --fondo-oscuro: #050505;
+            --cristal: rgba(255, 255, 255, 0.12);
+            --fuente-elegante: 'Great Vibes', cursive;
+            --fuente-manuscrita: 'Caveat', cursive;
+            --fuente-lectura: 'Montserrat', sans-serif;
+        }
+
+        * { box-sizing: border-box; user-select: none; }
+
+        body, html {
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            background: var(--fondo-oscuro);
+            color: white;
+            overflow: hidden;
+            font-family: var(--fuente-lectura);
+        }
+
+        #canvas-estrellas {
+            position: fixed; top: 0; left: 0; z-index: 0;
+            background: radial-gradient(circle at center, #0d1b2a 0%, #000 100%);
+        }
+
+        .tarjeta {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            width: 92%;
+            max-width: 550px;
+            background: var(--cristal);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 40px;
+            padding: 35px;
+            text-align: center;
+            box-shadow: 0 25px 70px rgba(0,0,0,0.9);
+            z-index: 10;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .tarjeta.activa {
+            opacity: 1;
+            pointer-events: all;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        h1 {
+            font-family: var(--fuente-elegante);
+            font-size: 3.2rem;
+            color: var(--celeste);
+            margin: 0 0 10px 0;
+            text-shadow: 0 0 20px rgba(179, 229, 252, 0.6);
+        }
+
+        /* CONTENEDOR CON SCROLLBAR */
+        #contenedor-carta {
+            max-height: 350px; /* Altura fija para permitir el scroll */
+            overflow-y: auto;
+            margin: 20px 0;
+            padding-right: 15px;
+            text-align: left;
+        }
+
+        /* Estilo de la barra de deslizar (Scrollbar) */
+        #contenedor-carta::-webkit-scrollbar {
+            width: 6px;
+        }
+        #contenedor-carta::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+        #contenedor-carta::-webkit-scrollbar-thumb {
+            background: var(--azul-brillante);
+            border-radius: 10px;
+            box-shadow: 0 0 10px var(--azul-brillante);
+        }
+
+        #texto-carta {
+            font-family: var(--fuente-manuscrita);
+            font-size: 1.6rem;
+            line-height: 1.4;
+            color: #ffffff;
+            white-space: pre-line;
+        }
+
+        .boton {
+            font-family: var(--fuente-lectura);
+            background: linear-gradient(45deg, #0277bd, #4fc3f7);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: 0.4s;
+        }
+
+        .boton:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(79, 195, 247, 0.6);
+        }
+
+        /* ANIMACIONES AMBIENTE */
+        .frase-flotante {
+            position: fixed;
+            font-family: var(--fuente-manuscrita);
+            color: var(--celeste);
+            font-size: 1.4rem;
+            pointer-events: none;
+            z-index: 5;
+            animation: subirFrase linear forwards;
+        }
+
+        @keyframes subirFrase {
+            0% { transform: translateY(105vh); opacity: 0; }
+            15% { opacity: 0.8; }
+            85% { opacity: 0.8; }
+            100% { transform: translateY(-10vh); opacity: 0; }
+        }
+
+        .corazon-cae {
+            position: fixed; top: -50px;
+            font-size: 24px; pointer-events: none; z-index: 4;
+            animation: caerCorazon linear forwards;
+        }
+
+        @keyframes caerCorazon {
+            to { transform: translateY(110vh) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="canvas-estrellas"></canvas>
+
+    <div class="tarjeta activa" id="paso1">
+        <h1>Hola, Isa 🩵</h1>
+        <p>hice esta carta para ti...</p>
+        <button class="boton" onclick="navegar(1, 2)">Abrir carta</button>
+    </div>
+
+    <div class="tarjeta" id="paso2">
+        <h1 style="font-size: 2.8rem;">Quiero decirte...</h1>
+        
+        <div id="contenedor-carta">
+            <div id="texto-carta"></div>
+            <div id="firma" style="opacity:0; transition: 2s; font-family: var(--fuente-elegante); font-size: 2.8rem; color: var(--celeste); margin-top: 25px; text-align: center;">
+                Te amo, Migue.
+            </div>
+        </div>
+
+        <p style="font-size: 0.8rem; opacity: 0.6; font-style: italic;">"te amo🩵"</p>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas-estrellas');
+        const ctx = canvas.getContext('2d');
+        let estrellas = [];
+
+        function init() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            estrellas = Array.from({length: 150}, () => ({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                s: Math.random() * 0.4 + 0.1,
+                r: Math.random() * 1.3
+            }));
+        }
+
+        function draw() {
+            ctx.clearRect(0,0,canvas.width, canvas.height);
+            ctx.fillStyle = "white";
+            estrellas.forEach(e => {
+                ctx.beginPath(); ctx.arc(e.x, e.y, e.r, 0, Math.PI*2); ctx.fill();
+                e.y -= e.s; if(e.y < 0) e.y = canvas.height;
+            });
+            requestAnimationFrame(draw);
+        }
+
+        function navegar(actual, sig) {
+            document.getElementById('paso' + actual).classList.remove('activa');
+            setTimeout(() => {
+                document.getElementById('paso' + sig).classList.add('activa');
+                if(sig === 2) escribirCarta();
+            }, 600);
+        }
+
+        const texto = "Isabella,\n\nQuiero decirte que desde que llegaste a mi vida todo ha tenido color y sentido. Antes de ti, las cosas eran diferentes, pero tú trajiste una luz que no sabía que necesitaba.\n\nEn este tiempo te has convertido en la mujer más especial para mí. Sé que no soy perfecto y que tengo muchas cosas por mejorar, pero quiero que sepas que lo haré con todo el amor del mundo; lo haré porque no tengo duda de que quiero ser lo mejor para usted.\n\nPerdóname por todas las veces que te hago enojar o cuando no sé expresarme de la manera correcta. A veces me cuesta encontrar las palabras, pero mi corazón siempre está en el lugar correcto, buscando cuidarte.\n\nEres la mujer más perfecta que han visto mis ojos y por la cual mis pupilas se dilatan cada vez que te miro. No hay nadie más, siempre has sido y serás tú la dueña de mi admiración.\n\nGracias por tu paciencia, por tu amor y por ser mi razón para querer ser mejor cada día. Eres mi refugio y mi felicidad.";
+
+        function escribirCarta() {
+            let i = 0;
+            const cajaTexto = document.getElementById('texto-carta');
+            const contenedor = document.getElementById('contenedor-carta');
+            
+            function escribir() {
+                if(i < texto.length) {
+                    cajaTexto.innerHTML += texto.charAt(i);
+                    i++;
+                    // Hace que la barra baje sola mientras escribe
+                    contenedor.scrollTop = contenedor.scrollHeight;
+                    setTimeout(escribir, 45);
+                } else {
+                    document.getElementById('firma').style.opacity = "1";
+                    contenedor.scrollTop = contenedor.scrollHeight;
+                    lanzarMagia();
+                }
+            }
+            escribir();
+        }
+
+        function lanzarMagia() {
+            const frases = ["Te amo", "Perdóname", "Eres mi mundo", "Te extraño", "Pupilas dilatadas", "Eres perfecta", "🩵"];
+            setInterval(() => {
+                const f = document.createElement('div');
+                f.className = 'frase-flotante';
+                f.innerHTML = frases[Math.floor(Math.random() * frases.length)];
+                f.style.left = Math.random() * 80 + 10 + 'vw';
+                f.style.animationDuration = (Math.random() * 3 + 5) + 's';
+                document.body.appendChild(f);
+                setTimeout(() => f.remove(), 8000);
+            }, 1000);
+
+            setInterval(() => {
+                const c = document.createElement('div');
+                c.className = 'corazon-cae';
+                c.innerHTML = '🩵';
+                c.style.left = Math.random() * 100 + 'vw';
+                c.style.animationDuration = (Math.random() * 2 + 4) + 's';
+                document.body.appendChild(c);
+                setTimeout(() => c.remove(), 5000);
+            }, 600);
+        }
+
+        init(); draw();
+        window.onresize = init;
+    </script>
+</body>
+</html>
