@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Para Isabella 🩵</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500&family=Caveat:wght@700&family=Great+Vibes&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&family=Caveat:wght@700&family=Great+Vibes&display=swap" rel="stylesheet">
 
     <style>
         :root {
             --celeste: #b3e5fc;
             --azul-brillante: #4fc3f7;
             --fondo-oscuro: #050505;
-            --cristal: rgba(255, 255, 255, 0.12);
+            --cristal: rgba(255, 255, 255, 0.1);
             --fuente-elegante: 'Great Vibes', cursive;
             --fuente-manuscrita: 'Caveat', cursive;
             --fuente-lectura: 'Montserrat', sans-serif;
@@ -43,15 +43,15 @@
             background: var(--cristal);
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 40px;
-            padding: 35px;
+            padding: 30px;
             text-align: center;
-            box-shadow: 0 25px 70px rgba(0,0,0,0.9);
+            box-shadow: 0 25px 70px rgba(0,0,0,0.8);
             z-index: 10;
             opacity: 0;
             pointer-events: none;
-            transition: all 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .tarjeta.activa {
@@ -62,61 +62,72 @@
 
         h1 {
             font-family: var(--fuente-elegante);
-            font-size: 3.2rem;
+            font-size: 3rem;
             color: var(--celeste);
-            margin: 0 0 10px 0;
-            text-shadow: 0 0 20px rgba(179, 229, 252, 0.6);
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px rgba(179, 229, 252, 0.5);
         }
 
-        /* CONTENEDOR CON SCROLLBAR */
+        /* SCROLLBAR CUSTOM */
         #contenedor-carta {
-            max-height: 350px; /* Altura fija para permitir el scroll */
+            max-height: 300px;
             overflow-y: auto;
             margin: 20px 0;
-            padding-right: 15px;
+            padding-right: 10px;
             text-align: left;
         }
 
-        /* Estilo de la barra de deslizar (Scrollbar) */
-        #contenedor-carta::-webkit-scrollbar {
-            width: 6px;
-        }
-        #contenedor-carta::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-        }
-        #contenedor-carta::-webkit-scrollbar-thumb {
-            background: var(--azul-brillante);
-            border-radius: 10px;
-            box-shadow: 0 0 10px var(--azul-brillante);
-        }
+        #contenedor-carta::-webkit-scrollbar { width: 5px; }
+        #contenedor-carta::-webkit-scrollbar-thumb { background: var(--azul-brillante); border-radius: 10px; }
 
         #texto-carta {
             font-family: var(--fuente-manuscrita);
             font-size: 1.6rem;
-            line-height: 1.4;
-            color: #ffffff;
+            line-height: 1.3;
             white-space: pre-line;
         }
 
+        /* BOTONES */
         .boton {
             font-family: var(--fuente-lectura);
             background: linear-gradient(45deg, #0277bd, #4fc3f7);
             color: white;
             border: none;
-            padding: 15px 40px;
-            font-size: 0.85rem;
-            font-weight: 600;
+            padding: 12px 30px;
+            font-size: 0.8rem;
+            font-weight: 700;
             border-radius: 50px;
             cursor: pointer;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            transition: 0.4s;
+            letter-spacing: 1px;
+            transition: 0.3s;
+            margin: 5px;
         }
 
         .boton:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(79, 195, 247, 0.6);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(79, 195, 247, 0.4);
+        }
+
+        .grid-detalles {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        #cuadro-detalle {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            font-family: var(--fuente-manuscrita);
+            font-size: 1.4rem;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px dashed var(--celeste);
         }
 
         /* ANIMACIONES AMBIENTE */
@@ -124,7 +135,7 @@
             position: fixed;
             font-family: var(--fuente-manuscrita);
             color: var(--celeste);
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             pointer-events: none;
             z-index: 5;
             animation: subirFrase linear forwards;
@@ -132,19 +143,9 @@
 
         @keyframes subirFrase {
             0% { transform: translateY(105vh); opacity: 0; }
-            15% { opacity: 0.8; }
-            85% { opacity: 0.8; }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
             100% { transform: translateY(-10vh); opacity: 0; }
-        }
-
-        .corazon-cae {
-            position: fixed; top: -50px;
-            font-size: 24px; pointer-events: none; z-index: 4;
-            animation: caerCorazon linear forwards;
-        }
-
-        @keyframes caerCorazon {
-            to { transform: translateY(110vh) rotate(360deg); }
         }
     </style>
 </head>
@@ -153,25 +154,42 @@
     <canvas id="canvas-estrellas"></canvas>
 
     <div class="tarjeta activa" id="paso1">
-        <h1>Hola, Isa 🩵</h1>
-        <p>hice esta carta para ti...</p>
-        <button class="boton" onclick="navegar(1, 2)">Abrir carta</button>
+        <h1>Hola, Isabella 🩵</h1>
+        <p>Hice esto para recordarte lo especial que eres y para decirte lo que a veces no me sale con palabras...</p>
+        <button class="boton" onclick="navegar(1, 2)">Abrir mi carta</button>
     </div>
 
     <div class="tarjeta" id="paso2">
-        <h1 style="font-size: 2.8rem;">Quiero decirte...</h1>
-        
+        <h1>Para ti...</h1>
         <div id="contenedor-carta">
             <div id="texto-carta"></div>
-            <div id="firma" style="opacity:0; transition: 2s; font-family: var(--fuente-elegante); font-size: 2.8rem; color: var(--celeste); margin-top: 25px; text-align: center;">
+            <div id="firma" style="opacity:0; transition: 2s; font-family: var(--fuente-elegante); font-size: 2.5rem; color: var(--celeste); margin-top: 20px; text-align: center;">
                 Te amo, Migue.
             </div>
         </div>
+        <button class="boton" id="btn-detalles" style="display:none;" onclick="navegar(2, 3)">Amo cada parte de vos</button>
+    </div>
 
-        <p style="font-size: 0.8rem; opacity: 0.6; font-style: italic;">"te amo🩵"</p>
+    <div class="tarjeta" id="paso3">
+        <h1>Lo que me encanta...</h1>
+        <p>Presiona cada botón para saber por qué eres perfecta para mí:</p>
+        
+        <div class="grid-detalles">
+            <button class="boton" onclick="mostrarDetalle('ojos')">Tus Ojos</button>
+            <button class="boton" onclick="mostrarDetalle('sonrisa')">Tu Sonrisa</button>
+            <button class="boton" onclick="mostrarDetalle('ser')">Tu forma de ser</button>
+            <button class="boton" onclick="mostrarDetalle('paz')">La paz que me das</button>
+        </div>
+
+        <div id="cuadro-detalle">Toca un botón arriba...</div>
+        
+        <div style="margin-top: 20px; font-family: var(--fuente-elegante); font-size: 2rem; color: var(--celeste);">
+            Eres mi mundo entero.
+        </div>
     </div>
 
     <script>
+        // --- ESTRELLAS ---
         const canvas = document.getElementById('canvas-estrellas');
         const ctx = canvas.getContext('2d');
         let estrellas = [];
@@ -179,11 +197,11 @@
         function init() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-            estrellas = Array.from({length: 150}, () => ({
+            estrellas = Array.from({length: 120}, () => ({
                 x: Math.random() * canvas.width,
                 y: Math.random() * canvas.height,
                 s: Math.random() * 0.4 + 0.1,
-                r: Math.random() * 1.3
+                r: Math.random() * 1.2
             }));
         }
 
@@ -197,6 +215,7 @@
             requestAnimationFrame(draw);
         }
 
+        // --- NAVEGACIÓN ---
         function navegar(actual, sig) {
             document.getElementById('paso' + actual).classList.remove('activa');
             setTimeout(() => {
@@ -205,31 +224,48 @@
             }, 600);
         }
 
-        const texto = "Isabella,\n\nQuiero decirte que desde que llegaste a mi vida todo ha tenido color y sentido. Antes de ti, las cosas eran diferentes, pero tú trajiste una luz que no sabía que necesitaba.\n\nEn este tiempo te has convertido en la mujer más especial para mí. Sé que no soy perfecto y que tengo muchas cosas por mejorar, pero quiero que sepas que lo haré con todo el amor del mundo; lo haré porque no tengo duda de que quiero ser lo mejor para usted.\n\nPerdóname por todas las veces que te hago enojar o cuando no sé expresarme de la manera correcta. A veces me cuesta encontrar las palabras, pero mi corazón siempre está en el lugar correcto, buscando cuidarte.\n\nEres la mujer más perfecta que han visto mis ojos y por la cual mis pupilas se dilatan cada vez que te miro. No hay nadie más, siempre has sido y serás tú la dueña de mi admiración.\n\nGracias por tu paciencia, por tu amor y por ser mi razón para querer ser mejor cada día. Eres mi refugio y mi felicidad.";
+        // --- LÓGICA DE LA CARTA ---
+        const textoCarta = "Isabella,\n\nDesde que llegaste a mi vida todo ha tenido color y sentido. Te has convertido en la mujer más especial para mí. Sé que tengo cosas por mejorar, pero lo haré porque no tengo duda de que quiero ser lo mejor para ustedes.\n\nPerdóname por todas las veces que te hago enojar o cuando no sé expresarme. Eres la mujer más perfecta que han visto mis ojos y por la cual mis pupilas se dilatan cada vez que te veo...";
 
         function escribirCarta() {
             let i = 0;
-            const cajaTexto = document.getElementById('texto-carta');
             const contenedor = document.getElementById('contenedor-carta');
+            const caja = document.getElementById('texto-carta');
             
             function escribir() {
-                if(i < texto.length) {
-                    cajaTexto.innerHTML += texto.charAt(i);
+                if(i < textoCarta.length) {
+                    caja.innerHTML += textoCarta.charAt(i);
                     i++;
-                    // Hace que la barra baje sola mientras escribe
                     contenedor.scrollTop = contenedor.scrollHeight;
-                    setTimeout(escribir, 45);
+                    setTimeout(escribir, 40);
                 } else {
                     document.getElementById('firma').style.opacity = "1";
-                    contenedor.scrollTop = contenedor.scrollHeight;
+                    document.getElementById('btn-detalles').style.display = "inline-block";
                     lanzarMagia();
                 }
             }
             escribir();
         }
 
+        // --- DETALLES DINÁMICOS ---
+        const detalles = {
+            ojos: "Tus ojos son mi galaxia favorita. Tienen ese brillo único que me hipnotiza y es verdad lo que te digo: mis pupilas se dilatan solo de verte, porque eres lo más hermoso que he contemplado.",
+            sonrisa: "Tu sonrisa es el sonido más lindo de mi mundo. Ver esa curva en tus labios me quita cualquier estrés y me recuerda que todo vale la pena si estás feliz.",
+            ser: "Amo tu forma de ser, esa combinación de fuerza y dulzura. Eres auténtica, inteligente y la mujer que me inspira a ser alguien mejor cada día.",
+            paz: "Contigo el mundo se detiene. Me das una paz que no encuentro en ningún otro lugar, eres mi refugio seguro y donde siempre quiero volver."
+        };
+
+        function mostrarDetalle(tipo) {
+            const cuadro = document.getElementById('cuadro-detalle');
+            cuadro.style.opacity = 0;
+            setTimeout(() => {
+                cuadro.innerHTML = detalles[tipo];
+                cuadro.style.opacity = 1;
+            }, 300);
+        }
+
         function lanzarMagia() {
-            const frases = ["Te amo", "Perdóname", "Eres mi mundo", "Te extraño", "Pupilas dilatadas", "Eres perfecta", "🩵"];
+            const frases = ["Te amo", "Eres perfecta", "Pupilas dilatadas", "Mi Isabella", "🩵"];
             setInterval(() => {
                 const f = document.createElement('div');
                 f.className = 'frase-flotante';
@@ -239,16 +275,6 @@
                 document.body.appendChild(f);
                 setTimeout(() => f.remove(), 8000);
             }, 1000);
-
-            setInterval(() => {
-                const c = document.createElement('div');
-                c.className = 'corazon-cae';
-                c.innerHTML = '🩵';
-                c.style.left = Math.random() * 100 + 'vw';
-                c.style.animationDuration = (Math.random() * 2 + 4) + 's';
-                document.body.appendChild(c);
-                setTimeout(() => c.remove(), 5000);
-            }, 600);
         }
 
         init(); draw();
